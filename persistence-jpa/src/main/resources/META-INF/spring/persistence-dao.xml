@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+       xsi:schemaLocation="
+         http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/osgi
+         http://www.springframework.org/schema/osgi/spring-osgi.xsd
+         http://www.springframework.org/schema/osgi-compendium
+         http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+    <!--
+         Activates various annotations to be detected in bean classes: Spring's
+         @Required and @Autowired, as well as JSR 250's @PostConstruct,
+         @PreDestroy and @Resource (if available) and JPA's @PersistenceContext
+         and @PersistenceUnit (if available).
+     -->
+    <context:annotation-config/>
+
+    <!-- enables interpretation of the @PersistenceUnit/@PersistenceContext annotations providing convenient
+         access to EntityManagerFactory/EntityManager -->
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/>
+
+    <!-- DAO Declarations -->
+    <bean id="incidentDAO" class="org.fusesource.devoxx.reportincident.dao.impl.IncidentDAOImpl"/>
+
+    <!-- Expose DAO interface as OSGI Service -->
+    <osgi:service ref="incidentDAO" interface="org.fusesource.devoxx.reportincident.dao.IncidentDAO"/>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="persistenceUnitName" value="reportIncident"/>
+        <property name="jpaVendorAdapter" ref="jpaAdapterH2"/>
+        <property name="dataSource" ref="dataSourceH2"/>
+    </bean>
+
+    <!--
+    <osgi:service ref="entityManagerFactory" interface="javax.persistence.EntityManagerFactory" />
+    -->
+
+    <!-- OpenJPA Derby addapter
+    <bean id="jpaAdapterDerby" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter">
+        <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.DerbyDictionary" />
+        <property name="database" value="DERBY" />
+        <property name="showSql" value="true" />        
+    </bean>
+     -->
+
+    <!-- OpenJPA MySQL adapter
+    <bean id="jpaAdapterMYSQL"
+        class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter">
+        <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.MySQLDictionary" />
+        <property name="showSql" value="true" />
+    </bean>
+    -->
+
+    <!-- OpenJPA HSQL addapter
+    <bean id="jpaAdapterHSQL" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter">
+        <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.HSQLDictionary"/>
+        <property name="database" value="HSQL"/>
+        <property name="showSql" value="true"/>
+    </bean>
+     -->
+
+    <bean id="jpaAdapterH2" class="org.springframework.orm.jpa.vendor.OpenJpaVendorAdapter">
+        <property name="databasePlatform" value="org.apache.openjpa.jdbc.sql.H2Dictionary"/>
+        <property name="database" value="H2"/>
+        <property name="showSql" value="true"/>
+    </bean>
+
+
+    <!-- DataSource MYSQL
+    <bean id="dataSourceMYSQL" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="username" value="root" />
+        <property name="password" value="" />
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/reportincident" />
+        <property name="defaultAutoCommit" value="true"/>
+    </bean>
+    -->
+
+    <!-- DataSource Derby
+     <bean id="dataSourceDERBY" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+         <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+         <property name="url" value="jdbc:derby:/temp/reportincident;create=true" />
+         <property name="username" value="" />
+         <property name="password" value="" />
+     </bean>
+     -->
+
+    <!-- DataSource HSQL
+    <bean id="dataSourceHSQL" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+        <property name="url" value="jdbc:hsqldb:mem:reportincident"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+    -->
+
+    <bean id="dataSourceH2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="org.h2.Driver"/>
+        <property name="url" value="jdbc:h2:tcp://localhost/~/reportdb"/>
+        <property name="username" value="sa"/>
+        <property name="password" value=""/>
+    </bean>
+
+    <!-- TransactionManager is required -->
+    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="dataSource" ref="dataSourceH2"/>
+    </bean>
+
+    <!--  Expose Transaction Manager -->
+    <osgi:service ref="txManager" interface="org.springframework.transaction.PlatformTransactionManager">
+        <osgi:service-properties>
+            <entry key="tx" value="JPA"/>
+        </osgi:service-properties>
+    </osgi:service>
+
+    <!-- Properties
+    <osgix:cm-properties id="preProps" persistent-id="org.fusesource.devoxx.reportincident.datasource">
+        <prop key="driverClassName">org.hsqldb.jdbcDriver</prop>
+        <prop key="url">jdbc:hsqldb:mem:reportincident</prop>
+        <prop key="username">sa</prop>
+        <prop key="password"></prop>
+    </osgix:cm-properties>
+    -->
+
+
+</beans>

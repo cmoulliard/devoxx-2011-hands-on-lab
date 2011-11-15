@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<features>
+
+    <feature name="reportincident-jpa" version="${project.version}">
+        <feature version='${camel-version}'>camel-bindy</feature>
+        <feature version='${camel-version}'>camel-cxf</feature>
+        <feature version='${servicemix-version}'>camel-activemq</feature>
+        <feature version='${wicket-version}'>wicket</feature>
+        <feature>jdbc-driver-h2</feature>
+        <feature version='${spring-version}'>spring-persistence</feature>
+        <feature version='${openjpa-version}'>openjpa</feature>
+        <feature>spring-dm-web</feature>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/persistence-jpa/${project.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/service/${project.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/webservice/${project.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/routing/${project.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/web/${project.version}/war</bundle>
+    </feature>
+
+    <!--
+    <feature name="spring-web">
+        <feature version='${spring-osgi-version}'>spring-dm</feature>
+        <bundle>mvn:org.springframework/spring-web/${spring-version}</bundle>
+        <bundle>mvn:org.springframework.osgi/spring-osgi-web/${spring-osgi-version}</bundle>
+    </feature>
+    -->
+    <feature name="spring-persistence" version="${spring-version}">
+        <bundle>mvn:org.springframework/spring-orm/${spring-version}</bundle>
+        <bundle>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
+        <bundle>mvn:org.springframework/spring-aspects/${spring-version}</bundle>
+    </feature>
+
+    <feature name="openjpa" version="${openjpa-version}">
+        <bundle>mvn:org.apache.geronimo.specs/geronimo-jpa_2.0_spec/1.1</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.serp/1.13.1_2</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/1.4_1</bundle>
+        <bundle>mvn:org.apache.openjpa/openjpa/${openjpa-version}</bundle>
+     </feature>
+
+    <feature name="jdbc-driver-h2" version="${h2-version}">
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/1.4_1</bundle>
+        <bundle>mvn:com.h2database/h2/${h2-version}</bundle>
+    </feature>
+
+    <feature name="wicket" version="${wicket-version}">
+        <bundle>mvn:org.apache.wicket/wicket/${wicket-version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-ioc/${wicket-version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-spring/${wicket-version}</bundle>
+        <bundle>mvn:org.apache.wicket/wicket-extensions/${wicket-version}</bundle>
+    </feature>
+
+    <!--
+
+    <feature name="reportincident" version="${project.version}">
+        <feature version='${camel-version}'>camel-bindy</feature>
+        <feature version='${camel-version}'>camel-cxf</feature>
+        <feature version='${servicemix-version}'>camel-activemq</feature>
+        <feature version='${wicket-version}'>wicket</feature>
+        <feature version='${derby-version}'>jdbc-driver-derby</feature>
+        <feature version='${spring-version}'>spring-persistence</feature>
+        <feature version='${aries-version}'>aries</feature>
+        <feature>hibernate</feature>
+        <feature>spring-web</feature>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/model/${pom.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/persistence/${pom.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/service/${pom.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/webservice/${pom.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/routing/${pom.version}</bundle>
+        <bundle>mvn:org.fusesource.devoxx.reportincident/web/${pom.version}/war</bundle>
+    </feature>
+
+    <feature name="hibernate">
+        <bundle>mvn:org.springframework/spring-orm/${spring-version}</bundle>
+        <bundle>mvn:org.springframework/spring-jdbc/${spring-version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/1.6.1_2</bundle>
+        <bundle>mvn:org.antlr/com.springsource.antlr/2.7.7</bundle>
+        <bundle>mvn:org.jgroups/com.springsource.org.jgroups/2.5.1</bundle>
+        <bundle>mvn:org.jboss.javassist/com.springsource.javassist/3.3.0.ga</bundle>
+        <bundle>mvn:org.hibernate/com.springsource.org.hibernate/3.3.1.GA</bundle>
+    </feature>
+
+    <feature name="openjpa" version="${openjpa-version}">
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/1.6.8_1</bundle>
+        <bundle>mvn:org.apache.openjpa/openjpa/${openjpa-version}</bundle>
+        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.java-persistence-api-2.0/1.6.0</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.serp/1.13.1_2</bundle>
+    </feature>
+
+    <feature name="jdbc-driver-mysql">
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/1.4_1-SNAPSHOT</bundle>
+        <bundle>mvn:mysql/mysql-connector-java/5.1.9</bundle>
+    </feature>
+
+       <feature name="jdbc-driver-hsqldb" version="${hsqldb-version}">
+        <bundle>mvn:commons-pool/commons-pool/1.5.5</bundle>
+        <bundle>mvn:commons-dbcp/commons-dbcp/1.4</bundle>
+        <bundle>wrap:mvn:org.hsqldb/hsqldb/${hsqldb-version}</bundle>
+    </feature>
+
+    <feature name="jdbc-driver-derby" version="${derby-version}">
+        <bundle>mvn:commons-dbcp/commons-dbcp/1.4</bundle>
+        <bundle>mvn:org.apache.derby/derby/${derby-version}</bundle>
+    </feature>
+
+    <feature name="aries" version="${aries-version}">
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.blueprint.aries/${aries-version}</bundle>
+        <bundle>mvn:org.apache.aries.transaction/org.apache.aries.transaction.blueprint/${aries-version}</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.container/${aries-version}</bundle>
+        <bundle>mvn:org.apache.aries/org.apache.aries.util/${aries-version}</bundle>
+        <bundle>mvn:org.apache.aries.jpa/org.apache.aries.jpa.container.context/${aries-version}</bundle>
+        <bundle>mvn:org.apache.aries.jndi/org.apache.aries.jndi/${aries-version}</bundle>
+    </feature>
+
+    -->
+
+
+</features>

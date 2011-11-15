@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:osgi="http://www.springframework.org/schema/osgi"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans.xsd
+                      http://www.springframework.org/schema/osgi
+                      http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+
+    <!-- Expose Service as OSGI -->
+    <osgi:service ref="incidentService" interface="org.fusesource.devoxx.reportincident.service.IncidentService"/>
+ 
+                      
+    <!--  Target Declarations -->
+    <bean id="incidentServiceTarget" class="org.fusesource.devoxx.reportincident.service.impl.IncidentServiceImpl">
+        <property name="incidentDAO">
+            <osgi:reference interface="org.fusesource.devoxx.reportincident.dao.IncidentDAO"/>
+        </property>
+    </bean>
+
+    <bean id="abstractService" abstract="true" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+         <property name="transactionManager">
+             <osgi:reference id="txManager" filter="(tx=JPA)" interface="org.springframework.transaction.PlatformTransactionManager"/>
+         </property>
+    </bean>
+
+    <bean id="incidentService"
+          parent="abstractService"
+          class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+          
+        <property name="target">
+            <ref bean="incidentServiceTarget" />
+        </property>
+
+        <property name="proxyInterfaces">
+           <list>
+               <value>org.fusesource.devoxx.reportincident.service.IncidentService</value>
+           </list>
+        </property>
+
+        
+        <property name="transactionAttributes">
+            <props>
+                <prop key="*">PROPAGATION_REQUIRED</prop>
+            </props>
+        </property>
+    </bean>
+    
+</beans>

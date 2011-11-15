@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.fusesource.devoxx.reportincident</groupId>
+    <artifactId>routing</artifactId>
+    <packaging>bundle</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Reportincident :: Routing Bundle</name>
+    
+    <parent>
+        <groupId>org.apache.camel.example</groupId>
+        <artifactId>reportincident.parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.fusesource.devoxx.reportincident</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.devoxx.reportincident</groupId>
+            <artifactId>webservice</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.devoxx.reportincident</groupId>
+            <artifactId>persistence-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-spring</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-bindy</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-bundle</artifactId>
+            <version>${cxf-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-common-utilities</artifactId>
+            <version>${cxf-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-cxf</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jms</artifactId>
+            <version>${camel-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-camel</artifactId>
+            <version>${activemq-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-core</artifactId>
+            <version>${activemq-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <version>${spring-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-core</artifactId>
+            <version>${spring-osgi-version}</version>
+        </dependency>
+        
+        <!-- Test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-core</artifactId>
+            <version>${camel-version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- to compile with 1.5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <!-- to generate the MANIFEST-FILE of the bundle -->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <version>${felix-version}</version>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Import-Package>
+                            META-INF.cxf,
+                            META-INF.cxf.osgi,
+                            META-INF.wsdl,
+                            javax.xml.namespace,
+                            javax.xml.soap;version=0,
+                            javax.xml.ws;version=0,
+                            org.w3c.dom;version=0,
+                            org.apache.commons.logging,
+                            org.apache.camel;version="[2.0,3.0)",
+                            org.apache.camel.component;version="[2.0,3.0)",
+                            org.apache.camel.component.cxf;version="[2.0,3.0)",
+                            org.apache.camel.component.cxf.converter;version="[2.0,3.0)",
+                            org.apache.camel.component.jms;version="[2.0,3.0)",
+                            org.apache.camel.converter;version="[2.0,3.0)",
+                            org.apache.camel.converter.jaxp;version="[2.0,3.0)",
+                            org.apache.camel.converter.stream;version="[2.0,3.0)",
+                            org.apache.camel.dataformat.bindy;version="[2.0,3.0)",
+                            org.apache.camel.dataformat.bindy.csv;version="[2.0,3.0)",
+                            org.fusesource.devoxx.reportincident,
+                            org.fusesource.devoxx.reportincident.model,
+                            org.fusesource.devoxx.reportincident.service,
+                            org.apache.camel.processor;version="[2.0,3.0)",
+                            org.apache.activemq.camel.component;version="[5.3,6.0)",
+                            org.apache.activemq.camel.converter;version="[5.3,6.0)",
+                            org.apache.activemq.pool,
+                            org.apache.cxf,
+                            org.apache.cxf.binding,
+                            org.apache.cxf.binding.corba,
+                            org.apache.cxf.binding.soap,
+                            org.apache.cxf.binding.soap.spring,
+                            org.apache.cxf.bus,
+                            org.apache.cxf.bus.resource,
+                            org.apache.cxf.bus.spring,
+                            org.apache.cxf.buslifecycle,
+                            org.apache.cxf.catalog,
+                            org.apache.cxf.configuration,
+                            org.apache.cxf.configuration.spring,
+                            org.apache.cxf.endpoint,
+                            org.apache.cxf.headers,
+                            org.apache.cxf.management,
+                            org.apache.cxf.management.jmx,
+                            org.apache.cxf.phase,
+                            org.apache.cxf.resource,
+                            org.apache.cxf.service.factory,
+                            org.apache.cxf.tools.common.extensions.soap,
+                            org.apache.cxf.transport,
+                            org.apache.cxf.transport.http,
+                            org.apache.cxf.transport.http.policy,
+                            org.apache.cxf.transport.http_jetty,
+                            org.apache.cxf.transport.jms,
+                            org.apache.cxf.transports.http,
+                            org.apache.cxf.workqueue,
+                            org.apache.cxf.wsdl,
+                            org.apache.cxf.wsdl11,
+                            org.springframework.beans.factory.config,
+                            *
+                        </Import-Package>
+                        <Private-Package>org.fusesource.devoxx.reportincident.internal</Private-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <childDelegation>false</childDelegation>
+                    <useFile>true</useFile>
+                    <forkMode>pertest</forkMode>
+                    <!-- <excludes>
+                        <exclude>**/ReportIncident*Test.*</exclude>
+                    </excludes>  -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

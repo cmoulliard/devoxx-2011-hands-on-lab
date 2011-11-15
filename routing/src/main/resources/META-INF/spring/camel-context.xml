@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one or more
+    contributor license agreements.  See the NOTICE file distributed with
+    this work for additional information regarding copyright ownership.
+    The ASF licenses this file to You under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+             http://www.springframework.org/schema/osgi
+             http://www.springframework.org/schema/osgi/spring-osgi.xsd
+         http://camel.apache.org/schema/spring
+             http://camel.apache.org/schema/spring/camel-spring.xsd
+             http://camel.apache.org/schema/cxf
+             http://camel.apache.org/schema/cxf/camel-cxf.xsd
+             http://www.springframework.org/schema/osgi-compendium
+         http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+
+    <!-- CXFbeans required to setup Web Service -->
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+
+    <!-- Properties externalised in org.fusesource.devoxx.reportincident.routing.cfg file -->
+    <context:property-placeholder properties-ref="camelProps"/>
+    <osgix:cm-properties id="camelProps" persistent-id="org.fusesource.devoxx.reportincident.routing"/>
+
+    <!-- ActiveMQ component -->
+    <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+        <property name="connectionFactory">
+            <osgi:reference interface="javax.jms.ConnectionFactory"/>
+        </property>
+        <property name="transacted" value="true"/>
+        <property name="transactionManager">
+            <osgi:reference interface="org.springframework.transaction.PlatformTransactionManager"/>
+        </property>
+    </bean>
+
+    <!-- Beans used by Camel -->
+    <bean id="incidentSaver" class="org.fusesource.devoxx.reportincident.internal.IncidentSaver">
+        <property name="incidentService">
+            <osgi:reference interface="org.fusesource.devoxx.reportincident.service.IncidentService"/>
+        </property>
+    </bean>
+
+
+    <bean id="webservice" class="org.fusesource.devoxx.reportincident.internal.WebService"/>
+    <bean id="feedback" class="org.fusesource.devoxx.reportincident.internal.Feedback"/>
+
+    <!-- Tx Manager -->
+    <osgi:reference id="txManager" filter="(tx=JPA)" interface="org.springframework.transaction.PlatformTransactionManager"/>
+
+    <!-- PROPAGATION used for Transactions-->
+    <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="txManager"/>
+        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
+    </bean>
+
+    <!-- webservice endpoint -->
+    <cxf:cxfEndpoint id="reportIncident"
+                     address="http://localhost:8282/cxf/camel-example/incident"
+                     serviceClass="org.fusesource.devoxx.reportincident.ReportIncidentEndpoint"
+                     xmlns:s="http://reportincident.devoxx.fusesource.org">
+    </cxf:cxfEndpoint>
+
+    <camelContext trace="true" xmlns="http://camel.apache.org/schema/spring">
+
+        <dataFormats>
+            <bindy type="Csv" id="bindyDataFormat" packages="org.fusesource.devoxx.reportincident.model"/>
+        </dataFormats>
+
+        <route id="fileToQueueIn">
+            <from uri="file://data/reportincident/?move=backup/${date:now:yyyyMMdd}/${file:name.noext}.bak"/>
+            <setHeader headerName="origin">
+                <constant>file</constant>
+            </setHeader>
+            <unmarshal ref="bindyDataFormat"/>
+            <to uri="activemq:queue:in"/>
+        </route>
+
+        <route id="queueIntoIncidentSaver">
+            <from uri="activemq:queue:in"/>
+            <transacted ref="PROPAGATION_REQUIRED"/>
+            <to uri="bean:incidentSaver?method=process"/>
+        </route>
+
+        <route id="webServiceToQueueIn">
+            <from uri="cxf:bean:reportIncident"/>
+            <setHeader headerName="origin">
+                <constant>webservice</constant>
+            </setHeader>
+            <convertBodyTo type="org.fusesource.devoxx.reportincident.InputReportIncident"/>
+            <to uri="bean:webservice"/>
+            <inOnly uri="activemq:queue:in"/>
+            <transform>
+                <method bean="feedback" method="setOk"/>
+            </transform>
+        </route>
+
+    </camelContext>
+
+</beans>

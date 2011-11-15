@@ -1,0 +1,46 @@
+<html>
+<head>
+    <title>Report Incident HomePage</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body>
+    <strong>Report Incident HomePage</strong>
+    <br/>
+    <p/>
+    <span wicket:id="message">message will be here</span>
+    <p/>
+    
+    <table cellspacing="0" class="dataview">
+        <tr>
+            <th>Id</th>
+            <th>Incident Date</th>
+            <th>Incident Ref</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Summary</th>
+            <th>Details</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Origin</th>
+            <th>Creation date</th>
+        </tr>
+        <tr wicket:id="simple">
+            <td><span wicket:id="incidentId">[incidentId]</span></td>
+            <td><span wicket:id="incidentDate">[incidentDate]</span></td>
+            <td><span wicket:id="incidentRef">[incidentRef]</span></td>
+            <td><span wicket:id="givenName">[givenName]</span> </td>
+                <td><span wicket:id="familyName">[familyName]</span></td>
+            <td><span wicket:id="summary">[summary]</span></td>
+            <td><span wicket:id="details">[details]</span></td>
+            <td><span wicket:id="email">[email]</span></td>
+            <td><span wicket:id="phone">[phone]</span></td>
+            <td><span wicket:id="creationUser">[creationUser]</span></td>
+            <td><span wicket:id="creationDate">[creationDate]</span></td>
+        </tr>
+    </table>
+    
+    <div wicket:id="navigator"></div>
+    
+</body>
+</html>
+
