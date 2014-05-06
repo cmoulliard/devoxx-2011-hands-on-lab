@@ -67,7 +67,8 @@ public class IncidentSaver {
                 // Retrieve incident from model
                 Incident incident = (Incident) model.get(key);
                 incident.setCreationDate(creationDate);
-                incident.setCreationUser(origin);
+                incident.setOrigin(origin);
+                incident.setCreationUser("camel");
                 
                 LOG.debug("Count : " + count + ", " + incident.toString());
                 

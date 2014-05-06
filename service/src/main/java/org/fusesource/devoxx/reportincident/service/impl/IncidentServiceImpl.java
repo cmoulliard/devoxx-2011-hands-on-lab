@@ -18,6 +18,8 @@ package org.fusesource.devoxx.reportincident.service.impl;
 
 import java.util.List;
 
+import org.apache.camel.Body;
+import org.apache.camel.Header;
 import org.fusesource.devoxx.reportincident.model.Incident;
 import org.fusesource.devoxx.reportincident.dao.IncidentDAO;
 import org.apache.commons.logging.Log;
@@ -30,16 +32,6 @@ public class IncidentServiceImpl implements IncidentService {
 
     /** The incident dao. */
     private IncidentDAO incidentDAO;
-
-    public void saveIncident(Incident incident) {
-
-        try {
-            getIncidentDAO().saveIncident(incident);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public void removeIncident(long id) {
         getIncidentDAO().removeIncident(id);
@@ -55,6 +47,15 @@ public class IncidentServiceImpl implements IncidentService {
 
     public List<Incident> findIncident(String key) {
         return getIncidentDAO().findIncident(key);
+    }
+
+    @Override
+    public void saveIncident(Incident incident) {
+        try {
+            getIncidentDAO().saveIncident(incident);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

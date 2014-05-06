@@ -89,7 +89,7 @@ public class HomePage extends WebPage {
             }
         };
         
-        dataView.setItemsPerPage(10);
+        dataView.setItemsPerPage(20);
         add(dataView);
         add(new PagingNavigator("navigator", dataView));
 

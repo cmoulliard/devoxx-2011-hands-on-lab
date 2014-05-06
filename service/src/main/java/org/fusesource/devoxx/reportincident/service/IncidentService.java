@@ -18,6 +18,8 @@ package org.fusesource.devoxx.reportincident.service;
 
 import java.util.List;
 
+import org.apache.camel.Body;
+import org.apache.camel.Header;
 import org.fusesource.devoxx.reportincident.model.Incident;
 
 public interface IncidentService
