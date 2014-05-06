@@ -60,16 +60,6 @@
             <version>${camel-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-bundle</artifactId>
-            <version>${cxf-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-common-utilities</artifactId>
-            <version>${cxf-version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-cxf</artifactId>
             <version>${camel-version}</version>
@@ -84,12 +74,8 @@
             <artifactId>activemq-camel</artifactId>
             <version>${activemq-version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-core</artifactId>
-            <version>${activemq-version}</version>
-        </dependency>
 
+        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -102,21 +88,7 @@
             <version>${log4j-version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jms</artifactId>
-            <version>${spring-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.osgi</groupId>
-            <artifactId>spring-osgi-core</artifactId>
-            <version>${spring-osgi-version}</version>
-        </dependency>
+
         
         <!-- Test -->
         <dependency>
@@ -127,15 +99,14 @@
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
+            <artifactId>camel-test</artifactId>
             <version>${camel-version}</version>
-            <type>test-jar</type>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring-version}</version>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-test-spring</artifactId>
+            <version>${camel-version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -143,16 +114,6 @@
 
     <build>
         <plugins>
-            <!-- to compile with 1.5 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-
             <!-- to generate the MANIFEST-FILE of the bundle -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -207,7 +168,6 @@
                             org.apache.cxf.phase,
                             org.apache.cxf.resource,
                             org.apache.cxf.service.factory,
-                            org.apache.cxf.tools.common.extensions.soap,
                             org.apache.cxf.transport,
                             org.apache.cxf.transport.http,
                             org.apache.cxf.transport.http.policy,

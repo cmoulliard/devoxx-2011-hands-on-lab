@@ -64,6 +64,9 @@ public class Incident extends Abstract implements Serializable {
     @DataField(pos = 8)
     private String phone;
 
+    @Column(name = "ORIGIN", length = 15)
+    private String origin;
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "INCIDENT_ID")
@@ -145,6 +148,14 @@ public class Incident extends Abstract implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
     public String getCreationUser() {

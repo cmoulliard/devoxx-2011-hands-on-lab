@@ -31,10 +31,10 @@
              http://www.springframework.org/schema/osgi/spring-osgi.xsd
          http://camel.apache.org/schema/spring
              http://camel.apache.org/schema/spring/camel-spring.xsd
-             http://camel.apache.org/schema/cxf
+         http://camel.apache.org/schema/cxf
              http://camel.apache.org/schema/cxf/camel-cxf.xsd
-             http://www.springframework.org/schema/osgi-compendium
-         http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
+         http://www.springframework.org/schema/osgi-compendium
+            http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd">
 
     <!-- CXFbeans required to setup Web Service -->
     <import resource="classpath:META-INF/cxf/cxf.xml"/>
@@ -48,6 +48,8 @@
         <property name="connectionFactory">
             <osgi:reference interface="javax.jms.ConnectionFactory"/>
         </property>
+        <property name="userName" value="admin"/>
+        <property name="password" value="admin"/>
         <property name="transacted" value="true"/>
         <property name="transactionManager">
             <osgi:reference interface="org.springframework.transaction.PlatformTransactionManager"/>

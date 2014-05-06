@@ -234,7 +234,7 @@
                             WEB-INF/classes,
                         </Bundle-ClassPath>
                         <Import-Package>
-                            javax.servlet*;version="[2.5.0, 3.0.0)",
+                            javax.servlet*;version="[2.5.0, 4.0.0)",
                             org.springframework.web.context;version="[2.5.6, 4.0)",
                             org.springframework.web.context.support;version="[2.5.6, 4.0)",
                             org.springframework.osgi.web.context.support,
@@ -242,11 +242,10 @@
                         </Import-Package>
                         <Private-Package>org.fusesource.devoxx.reportincident</Private-Package>
                         <Export-Package></Export-Package>
-                        <Webapp-Context>reportincidentweb</Webapp-Context>
-                        <_failok>true</_failok>
+                        <Webapp-Context>/reportincidentweb</Webapp-Context>
+                        <Web-ContextPath>/reportincidentweb</Web-ContextPath>
                     </instructions>
                 </configuration>
-
             </plugin>
         </plugins>
     </build>

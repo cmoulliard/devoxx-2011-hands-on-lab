@@ -74,6 +74,7 @@ public class HomePage extends WebPage {
                 item.add(new Label("details", incident.getDetails()));
                 item.add(new Label("email", incident.getEmail()));
                 item.add(new Label("phone", incident.getPhone()));
+                item.add(new Label("origin", incident.getOrigin()));
                 item.add(new Label("creationUser", incident.getCreationUser()));
                 item.add(new Label("creationDate", String.valueOf(incident.getCreationDate())));
 
