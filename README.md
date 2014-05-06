@@ -1,6 +1,6 @@
 # Add this option to the karaf script
 
-DEFAULT_JAVA_OPTS="-Xms$JAVA_MIN_MEM -Xmx$JAVA_MAX_MEM -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass -XX:-UseSplitVerifier"
+DEFAULT_JAVA_OPTS="-Xms$JAVA_MIN_MEM -Xmx$JAVA_MAX_MEM -XX:+UnlockDiagnosticVMOptions -XX:+UnsyncloadClass *-XX:-UseSplitVerifier"*
 
 due to the issue with JDK 7 and Spring : http://stackoverflow.com/questions/8958267/java-lang-verifyerror-expecting-a-stackmap-frame
 
@@ -13,7 +13,6 @@ due to the issue with JDK 7 and Spring : http://stackoverflow.com/questions/8958
 * Deploy the features reportincident-jpa
 
     features:install reportincident-jpa
-
 
 * Verify that the Web Service works well
 
@@ -44,7 +43,7 @@ due to the issue with JDK 7 and Spring : http://stackoverflow.com/questions/8958
 
 * Copy some CSV records in the folder scanned by camel
 
-  cp routing/src/data/csv.txt ${JBOSS_FUSE.HOME}/data/reportincident
+    cp routing/src/data/csv.txt ${JBOSS_FUSE.HOME}/data/reportincident
     
 Remark : the pdf file is not up to date !!
 
